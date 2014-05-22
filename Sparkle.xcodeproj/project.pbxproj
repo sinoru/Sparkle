@@ -1462,7 +1462,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = finish_installation.pch;
-				INFOPLIST_FILE = "finish_installation_xpc-Info.plist";
+				INFOPLIST_FILE = "finish_installation_helper-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				MACH_O_TYPE = mh_execute;
 				PRODUCT_NAME = "org.andymatuschak.$(TARGET_NAME:rfc1034identifier)";
@@ -1481,7 +1481,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = finish_installation.pch;
-				INFOPLIST_FILE = "finish_installation_xpc-Info.plist";
+				INFOPLIST_FILE = "finish_installation_helper-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				MACH_O_TYPE = mh_execute;
 				PRODUCT_NAME = "org.andymatuschak.$(TARGET_NAME:rfc1034identifier)";
@@ -1498,7 +1498,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = finish_installation.pch;
-				INFOPLIST_FILE = "finish_installation_xpc-Info.plist";
+				INFOPLIST_FILE = "finish_installation_helper-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				MACH_O_TYPE = mh_execute;
 				PRODUCT_NAME = "org.andymatuschak.$(TARGET_NAME:rfc1034identifier)";
