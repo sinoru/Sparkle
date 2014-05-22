@@ -207,6 +207,7 @@
 		0867D6A5FE840307C02AAC07 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		1911E09E192DC90F00CB7D81 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		1911E0A0192DC91200CB7D81 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		1911E0A3192DFA1400CB7D81 /* finish_installation_helper-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "finish_installation_helper-Info.plist"; sourceTree = "<group>"; };
 		19C6A710192DC749009EDD10 /* org.andymatuschak.finish-installation-helper.xpc */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "org.andymatuschak.finish-installation-helper.xpc"; sourceTree = BUILT_PRODUCTS_DIR; };
 		19C6A712192DC749009EDD10 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		19DE5651192DF37C0058AADC /* finish_installation_helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = finish_installation_helper.m; sourceTree = "<group>"; };
@@ -590,6 +591,7 @@
 		19DE5650192DF36A0058AADC /* helper */ = {
 			isa = PBXGroup;
 			children = (
+				1911E0A3192DFA1400CB7D81 /* finish_installation_helper-Info.plist */,
 				19DE5651192DF37C0058AADC /* finish_installation_helper.m */,
 			);
 			name = helper;
