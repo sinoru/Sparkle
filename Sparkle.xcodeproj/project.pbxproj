@@ -7,6 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1911E090192DC87000CB7D81 /* org.andymatuschak.finish-installation-xpc.xpc in CopyFiles */ = {isa = PBXBuildFile; fileRef = 19C6A710192DC749009EDD10 /* org.andymatuschak.finish-installation-xpc.xpc */; };
+		1911E091192DC88500CB7D81 /* Sparkle.icns in Resources */ = {isa = PBXBuildFile; fileRef = 550347001370023A00AE7681 /* Sparkle.icns */; };
+		1911E092192DC88F00CB7D81 /* Sparkle.strings in Resources */ = {isa = PBXBuildFile; fileRef = 61AAE8220A321A7F00D8810D /* Sparkle.strings */; };
+		1911E093192DC8C000CB7D81 /* finish_installation.m in Sources */ = {isa = PBXBuildFile; fileRef = 55C14BD3136EEFCE00649790 /* finish_installation.m */; };
+		1911E094192DC8C600CB7D81 /* SUConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 61299A5F09CA6EB100B7442F /* SUConstants.m */; };
+		1911E095192DC8C800CB7D81 /* SULog.m in Sources */ = {isa = PBXBuildFile; fileRef = 55C14F05136EF6DB00649790 /* SULog.m */; };
+		1911E096192DC8CC00CB7D81 /* SUHost.m in Sources */ = {isa = PBXBuildFile; fileRef = 61EF67550E25B58D00F754E0 /* SUHost.m */; };
+		1911E097192DC8D200CB7D81 /* SUInstaller.m in Sources */ = {isa = PBXBuildFile; fileRef = 618FA5000DAE88B40026945C /* SUInstaller.m */; };
+		1911E098192DC8DF00CB7D81 /* SUStatusController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6196CFE409C71ADE000DC222 /* SUStatusController.m */; };
+		1911E099192DC8EA00CB7D81 /* SUPackageInstaller.m in Sources */ = {isa = PBXBuildFile; fileRef = 618FA5210DAE8E8A0026945C /* SUPackageInstaller.m */; };
+		1911E09A192DC8EF00CB7D81 /* SUStandardVersionComparator.m in Sources */ = {isa = PBXBuildFile; fileRef = 61A225A30D1C4AC000430CCD /* SUStandardVersionComparator.m */; };
+		1911E09B192DC8F300CB7D81 /* SUSystemProfiler.m in Sources */ = {isa = PBXBuildFile; fileRef = 61A2279B0D1CEE7600430CCD /* SUSystemProfiler.m */; };
+		1911E09C192DC90300CB7D81 /* SUWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61180BC90D64138900B4E0D1 /* SUWindowController.m */; };
+		1911E09D192DC90800CB7D81 /* SUPlainInstallerInternals.m in Sources */ = {isa = PBXBuildFile; fileRef = 61B5F8E509C4CE3C00B25A18 /* SUPlainInstallerInternals.m */; };
+		1911E09F192DC90F00CB7D81 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1911E09E192DC90F00CB7D81 /* Cocoa.framework */; };
+		1911E0A1192DC91200CB7D81 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1911E0A0192DC91200CB7D81 /* Security.framework */; };
+		1911E0A2192DC9CC00CB7D81 /* SUPlainInstaller.m in Sources */ = {isa = PBXBuildFile; fileRef = 618FA5040DAE8AB80026945C /* SUPlainInstaller.m */; };
 		3772FEA913DE0B6B00F79537 /* SUVersionDisplayProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 3772FEA813DE0B6B00F79537 /* SUVersionDisplayProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		525A2790133D6AE900FD8D70 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 525A278F133D6AE900FD8D70 /* Cocoa.framework */; };
 		525A27A0133D6B9700FD8D70 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 525A278F133D6AE900FD8D70 /* Cocoa.framework */; };
@@ -170,6 +187,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		1911E08F192DC86900CB7D81 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/XPCServices";
+			dstSubfolderSpec = 16;
+			files = (
+				1911E090192DC87000CB7D81 /* org.andymatuschak.finish-installation-xpc.xpc in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		61B5FB4D09C4E9FA00B25A18 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -189,6 +216,10 @@
 		0263187714FEBB42005EBF43 /* uk */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = uk; path = uk.lproj/SUUpdatePermissionPrompt.xib; sourceTree = "<group>"; };
 		0867D69BFE84028FC02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		0867D6A5FE840307C02AAC07 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		1911E09E192DC90F00CB7D81 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		1911E0A0192DC91200CB7D81 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		19C6A710192DC749009EDD10 /* org.andymatuschak.finish-installation-xpc.xpc */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "org.andymatuschak.finish-installation-xpc.xpc"; sourceTree = BUILT_PRODUCTS_DIR; };
+		19C6A712192DC749009EDD10 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		3772FEA813DE0B6B00F79537 /* SUVersionDisplayProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUVersionDisplayProtocol.h; sourceTree = "<group>"; };
 		525A278F133D6AE900FD8D70 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		550347001370023A00AE7681 /* Sparkle.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Sparkle.icns; sourceTree = "<group>"; };
@@ -422,6 +453,15 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		19C6A70D192DC749009EDD10 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1911E09F192DC90F00CB7D81 /* Cocoa.framework in Frameworks */,
+				1911E0A1192DC91200CB7D81 /* Security.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		55C14BB5136EEF1500649790 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -487,6 +527,7 @@
 				612279D90DB5470200AB99EA /* Sparkle Unit Tests.octest */,
 				5D06E8D00FD68C7C005AE3F6 /* BinaryDelta */,
 				55C14BB7136EEF1500649790 /* finish_installation.app */,
+				19C6A710192DC749009EDD10 /* org.andymatuschak.finish-installation-xpc.xpc */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -506,6 +547,7 @@
 				61B5F91D09C4CF7F00B25A18 /* Test Application Sources */,
 				0867D69AFE84028FC02AAC07 /* Apple Frameworks and Libraries */,
 				FA1941C40D94A6EA00DD942E /* Configurations */,
+				19C6A711192DC749009EDD10 /* Frameworks */,
 				034768DFFF38A50411DB9C8B /* Products */,
 			);
 			name = Sparkle;
@@ -543,6 +585,16 @@
 				93FB277D156BD826001937C7 /* SUPasswordPrompt.xib */,
 			);
 			name = "Framework Resources";
+			sourceTree = "<group>";
+		};
+		19C6A711192DC749009EDD10 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1911E0A0192DC91200CB7D81 /* Security.framework */,
+				1911E09E192DC90F00CB7D81 /* Cocoa.framework */,
+				19C6A712192DC749009EDD10 /* Foundation.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		55C14BD5136EEFD000649790 /* finish_installation tool */ = {
@@ -807,6 +859,23 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		19C6A70F192DC749009EDD10 /* finish_installation_xpc */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 19C6A720192DC749009EDD10 /* Build configuration list for PBXNativeTarget "finish_installation_xpc" */;
+			buildPhases = (
+				19C6A70E192DC749009EDD10 /* Resources */,
+				19C6A70C192DC749009EDD10 /* Sources */,
+				19C6A70D192DC749009EDD10 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = finish_installation_xpc;
+			productName = finish_installation_xpc;
+			productReference = 19C6A710192DC749009EDD10 /* org.andymatuschak.finish-installation-xpc.xpc */;
+			productType = "com.apple.product-type.bundle";
+		};
 		55C14BB6136EEF1500649790 /* finish_installation */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 55C14BBE136EEF1500649790 /* Build configuration list for PBXNativeTarget "finish_installation" */;
@@ -886,6 +955,7 @@
 			buildPhases = (
 				8DC2EF500486A6940098B216 /* Headers */,
 				8DC2EF520486A6940098B216 /* Resources */,
+				1911E08F192DC86900CB7D81 /* CopyFiles */,
 				8DC2EF540486A6940098B216 /* Sources */,
 				8DC2EF560486A6940098B216 /* Frameworks */,
 				6131B1910DDCDE32005215F0 /* Run Script: Set git Version Info */,
@@ -966,11 +1036,21 @@
 				612279D80DB5470200AB99EA /* Sparkle Unit Tests */,
 				5D06E8CF0FD68C7C005AE3F6 /* BinaryDelta */,
 				55C14BB6136EEF1500649790 /* finish_installation */,
+				19C6A70F192DC749009EDD10 /* finish_installation_xpc */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		19C6A70E192DC749009EDD10 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1911E092192DC88F00CB7D81 /* Sparkle.strings in Resources */,
+				1911E091192DC88500CB7D81 /* Sparkle.icns in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		55C14BB3136EEF1500649790 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1093,6 +1173,25 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		19C6A70C192DC749009EDD10 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1911E093192DC8C000CB7D81 /* finish_installation.m in Sources */,
+				1911E094192DC8C600CB7D81 /* SUConstants.m in Sources */,
+				1911E095192DC8C800CB7D81 /* SULog.m in Sources */,
+				1911E096192DC8CC00CB7D81 /* SUHost.m in Sources */,
+				1911E097192DC8D200CB7D81 /* SUInstaller.m in Sources */,
+				1911E098192DC8DF00CB7D81 /* SUStatusController.m in Sources */,
+				1911E0A2192DC9CC00CB7D81 /* SUPlainInstaller.m in Sources */,
+				1911E09A192DC8EF00CB7D81 /* SUStandardVersionComparator.m in Sources */,
+				1911E09B192DC8F300CB7D81 /* SUSystemProfiler.m in Sources */,
+				1911E099192DC8EA00CB7D81 /* SUPackageInstaller.m in Sources */,
+				1911E09C192DC90300CB7D81 /* SUWindowController.m in Sources */,
+				1911E09D192DC90800CB7D81 /* SUPlainInstallerInternals.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		55C14BB4136EEF1500649790 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1363,6 +1462,62 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		19C6A71D192DC749009EDD10 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = FA1941D30D94A70100DD942E /* ConfigRelaunchDebug.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = finish_installation.pch;
+				INFOPLIST_FILE = "finish_installation_xpc-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				MACH_O_TYPE = mh_execute;
+				PRODUCT_NAME = "org.andymatuschak.$(TARGET_NAME:rfc1034identifier)";
+				WRAPPER_EXTENSION = xpc;
+			};
+			name = Debug;
+		};
+		19C6A71E192DC749009EDD10 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = FA1941D40D94A70100DD942E /* ConfigRelaunchRelease.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = finish_installation.pch;
+				INFOPLIST_FILE = "finish_installation_xpc-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				MACH_O_TYPE = mh_execute;
+				PRODUCT_NAME = "org.andymatuschak.$(TARGET_NAME:rfc1034identifier)";
+				WRAPPER_EXTENSION = xpc;
+			};
+			name = Release;
+		};
+		19C6A71F192DC749009EDD10 /* Release (GC dual-mode; 10.5+) */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = FA1941D40D94A70100DD942E /* ConfigRelaunchRelease.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = finish_installation.pch;
+				INFOPLIST_FILE = "finish_installation_xpc-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				MACH_O_TYPE = mh_execute;
+				PRODUCT_NAME = "org.andymatuschak.$(TARGET_NAME:rfc1034identifier)";
+				WRAPPER_EXTENSION = xpc;
+			};
+			name = "Release (GC dual-mode; 10.5+)";
+		};
 		1DEB91AE08733DA50010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = FA1941CA0D94A70100DD942E /* ConfigFrameworkDebug.xcconfig */;
@@ -1546,6 +1701,16 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		19C6A720192DC749009EDD10 /* Build configuration list for PBXNativeTarget "finish_installation_xpc" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				19C6A71D192DC749009EDD10 /* Debug */,
+				19C6A71E192DC749009EDD10 /* Release */,
+				19C6A71F192DC749009EDD10 /* Release (GC dual-mode; 10.5+) */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		1DEB91AD08733DA50010E9CD /* Build configuration list for PBXNativeTarget "Sparkle" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

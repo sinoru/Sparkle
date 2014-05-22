@@ -175,40 +175,86 @@
 
 @end
 
+static void new_connection_handler(xpc_connection_t peer)
+{
+    xpc_connection_set_event_handler(peer, ^(xpc_object_t event) {
+        // Handle messages and errors.
+        
+        xpc_type_t type = xpc_get_type(event);
+        if (type == XPC_TYPE_ERROR) {
+            
+        }
+        else {
+            assert(type == XPC_TYPE_ARRAY);
+            
+#if 0	// Cmdline tool
+            NSString*	selfPath = nil;
+            if( argv[0][0] == '/' )
+                selfPath = [[NSFileManager defaultManager] stringWithFileSystemRepresentation: argv[0] length: strlen(argv[0])];
+            else
+            {
+                selfPath = [[NSFileManager defaultManager] currentDirectoryPath];
+                selfPath = [selfPath stringByAppendingPathComponent: [[NSFileManager defaultManager] stringWithFileSystemRepresentation: argv[0] length: strlen(argv[0])]];
+            }
+#else
+            NSString*	selfPath = [[NSBundle mainBundle] bundlePath];
+#endif
+            
+            if( xpc_array_get_count(event) < 4 || xpc_array_get_count(event) > 5 )
+                return;
+            
+            [[[TerminationListener alloc] initWithHostPath:xpc_array_get_string(event, 0)
+                                            executablePath:xpc_array_get_string(event, 1)
+                                           parentProcessId:atoi(xpc_array_get_string(event, 2))
+                                                folderPath:xpc_array_get_string(event, 3)
+                                            shouldRelaunch:xpc_array_get_bool(event, 4)
+                                                  selfPath: selfPath] autorelease];
+        }
+    });
+    xpc_connection_resume(peer);
+}
+
 int main (int argc, const char * argv[])
 {
-	if( argc < 5 || argc > 6 )
-		return EXIT_FAILURE;
-	
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	
-	//ProcessSerialNumber		psn = { 0, kCurrentProcess };
-	//TransformProcessType( &psn, kProcessTransformToForegroundApplication );
-	[[NSApplication sharedApplication] activateIgnoringOtherApps: YES];
+    if ([[[NSBundle mainBundle] infoDictionary] objectForKey:@"XPCService"] != NULL) {
+        xpc_main(new_connection_handler);
+        
+        exit(EXIT_FAILURE);
+    }
+    else {
+        if( argc < 5 || argc > 6 )
+            return EXIT_FAILURE;
+        
+        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+        
+        //ProcessSerialNumber		psn = { 0, kCurrentProcess };
+        //TransformProcessType( &psn, kProcessTransformToForegroundApplication );
+        [[NSApplication sharedApplication] activateIgnoringOtherApps: YES];
 		
-	#if 0	// Cmdline tool
-	NSString*	selfPath = nil;
-	if( argv[0][0] == '/' )
-		selfPath = [[NSFileManager defaultManager] stringWithFileSystemRepresentation: argv[0] length: strlen(argv[0])];
-	else
-	{
-		selfPath = [[NSFileManager defaultManager] currentDirectoryPath];
-		selfPath = [selfPath stringByAppendingPathComponent: [[NSFileManager defaultManager] stringWithFileSystemRepresentation: argv[0] length: strlen(argv[0])]];
-	}
-	#else
-	NSString*	selfPath = [[NSBundle mainBundle] bundlePath];
-	#endif
-	
-	[NSApplication sharedApplication];
-	[[[TerminationListener alloc] initWithHostPath: (argc > 1) ? argv[1] : NULL
-                                    executablePath: (argc > 2) ? argv[2] : NULL
-                                   parentProcessId: (argc > 3) ? atoi(argv[3]) : 0
-                                        folderPath: (argc > 4) ? argv[4] : NULL
-                                    shouldRelaunch: (argc > 5) ? atoi(argv[5]) : 1
-                                          selfPath: selfPath] autorelease];
-	[[NSApplication sharedApplication] run];
-	
-	[pool drain];
-	
-	return EXIT_SUCCESS;
+#if 0	// Cmdline tool
+        NSString*	selfPath = nil;
+        if( argv[0][0] == '/' )
+            selfPath = [[NSFileManager defaultManager] stringWithFileSystemRepresentation: argv[0] length: strlen(argv[0])];
+        else
+        {
+            selfPath = [[NSFileManager defaultManager] currentDirectoryPath];
+            selfPath = [selfPath stringByAppendingPathComponent: [[NSFileManager defaultManager] stringWithFileSystemRepresentation: argv[0] length: strlen(argv[0])]];
+        }
+#else
+        NSString*	selfPath = [[NSBundle mainBundle] bundlePath];
+#endif
+        
+        [NSApplication sharedApplication];
+        [[[TerminationListener alloc] initWithHostPath: (argc > 1) ? argv[1] : NULL
+                                        executablePath: (argc > 2) ? argv[2] : NULL
+                                       parentProcessId: (argc > 3) ? atoi(argv[3]) : 0
+                                            folderPath: (argc > 4) ? argv[4] : NULL
+                                        shouldRelaunch: (argc > 5) ? atoi(argv[5]) : 1
+                                              selfPath: selfPath] autorelease];
+        [[NSApplication sharedApplication] run];
+        
+        [pool drain];
+        
+        return EXIT_SUCCESS;
+    }
 }

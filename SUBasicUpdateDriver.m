@@ -313,43 +313,65 @@
     
 	if ([[updater delegate] respondsToSelector:@selector(updater:willInstallUpdate:)])
 		[[updater delegate] updater:updater willInstallUpdate:updateItem];
-	
-	// Copy the relauncher into a temporary directory so we can get to it after the new version's installed.
-	NSString *relaunchPathToCopy = [SPARKLE_BUNDLE pathForResource:@"finish_installation" ofType:@"app"];
-    NSString *targetPath = [[host appSupportPath] stringByAppendingPathComponent:[relaunchPathToCopy lastPathComponent]];
-	// Only the paranoid survive: if there's already a stray copy of relaunch there, we would have problems.
-	NSError *error = nil;
+    
+    if (xpc_connection_create != NULL) {
+        NSString *pathToRelaunch = [host bundlePath];
+        if ([[updater delegate] respondsToSelector:@selector(pathToRelaunchForUpdater:)])
+            pathToRelaunch = [[updater delegate] pathToRelaunchForUpdater:updater];
+        
+        xpc_connection_t relaunchService = xpc_connection_create_mach_service("org.andymatuschak.finish-installation-xpc", NULL, 0);
+        xpc_connection_resume(relaunchService);
+        
+        xpc_object_t message = xpc_array_create(NULL, 5);
+        xpc_array_set_string(message, 0, [host bundlePath].UTF8String);
+        xpc_array_set_string(message, 1, pathToRelaunch.UTF8String);
+        xpc_array_set_string(message, 2, [NSString stringWithFormat:@"%d", [[NSProcessInfo processInfo] processIdentifier]].UTF8String);
+        xpc_array_set_string(message, 3, tempDir.UTF8String);
+        xpc_array_set_bool(message, 4, relaunch);
+        
+        xpc_connection_send_message(relaunchService, message);
+        xpc_connection_send_barrier(relaunchService, ^{
+            [NSApp terminate:self];
+        });
+    }
+    else {
+        // Copy the relauncher into a temporary directory so we can get to it after the new version's installed.
+        NSString *relaunchPathToCopy = [SPARKLE_BUNDLE pathForResource:@"finish_installation" ofType:@"app"];
+        NSString *targetPath = [[host appSupportPath] stringByAppendingPathComponent:[relaunchPathToCopy lastPathComponent]];
+        // Only the paranoid survive: if there's already a stray copy of relaunch there, we would have problems.
+        NSError *error = nil;
 #if MAC_OS_X_VERSION_MIN_REQUIRED <= MAC_OS_X_VERSION_10_4
-	[[NSFileManager defaultManager] createDirectoryAtPath: [targetPath stringByDeletingLastPathComponent] attributes: [NSDictionary dictionary]];
+        [[NSFileManager defaultManager] createDirectoryAtPath: [targetPath stringByDeletingLastPathComponent] attributes: [NSDictionary dictionary]];
 #else
-	[[NSFileManager defaultManager] createDirectoryAtPath: [targetPath stringByDeletingLastPathComponent] withIntermediateDirectories: YES attributes: [NSDictionary dictionary] error: &error];
+        [[NSFileManager defaultManager] createDirectoryAtPath: [targetPath stringByDeletingLastPathComponent] withIntermediateDirectories: YES attributes: [NSDictionary dictionary] error: &error];
 #endif
 
-	// Only the paranoid survive: if there's already a stray copy of relaunch there, we would have problems.
-	if( [SUPlainInstaller copyPathWithAuthentication: relaunchPathToCopy overPath: targetPath temporaryName: nil error: &error] )
-		relaunchPath = [targetPath retain];
-	else
-		[self abortUpdateWithError:[NSError errorWithDomain:SUSparkleErrorDomain code:SURelaunchError userInfo:[NSDictionary dictionaryWithObjectsAndKeys:SULocalizedString(@"An error occurred while extracting the archive. Please try again later.", nil), NSLocalizedDescriptionKey, [NSString stringWithFormat:@"Couldn't copy relauncher (%@) to temporary path (%@)! %@", relaunchPathToCopy, targetPath, (error ? [error localizedDescription] : @"")], NSLocalizedFailureReasonErrorKey, nil]]];
-	
-    [[NSNotificationCenter defaultCenter] postNotificationName:SUUpdaterWillRestartNotification object:self];
-    if ([[updater delegate] respondsToSelector:@selector(updaterWillRelaunchApplication:)])
-        [[updater delegate] updaterWillRelaunchApplication:updater];
+        // Only the paranoid survive: if there's already a stray copy of relaunch there, we would have problems.
+        if( [SUPlainInstaller copyPathWithAuthentication: relaunchPathToCopy overPath: targetPath temporaryName: nil error: &error] )
+            relaunchPath = [targetPath retain];
+        else
+            [self abortUpdateWithError:[NSError errorWithDomain:SUSparkleErrorDomain code:SURelaunchError userInfo:[NSDictionary dictionaryWithObjectsAndKeys:SULocalizedString(@"An error occurred while extracting the archive. Please try again later.", nil), NSLocalizedDescriptionKey, [NSString stringWithFormat:@"Couldn't copy relauncher (%@) to temporary path (%@)! %@", relaunchPathToCopy, targetPath, (error ? [error localizedDescription] : @"")], NSLocalizedFailureReasonErrorKey, nil]]];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:SUUpdaterWillRestartNotification object:self];
+        if ([[updater delegate] respondsToSelector:@selector(updaterWillRelaunchApplication:)])
+            [[updater delegate] updaterWillRelaunchApplication:updater];
 
-    if(!relaunchPath || ![[NSFileManager defaultManager] fileExistsAtPath:relaunchPath])
-    {
-        // Note that we explicitly use the host app's name here, since updating plugin for Mail relaunches Mail, not just the plugin.
-        [self abortUpdateWithError:[NSError errorWithDomain:SUSparkleErrorDomain code:SURelaunchError userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:SULocalizedString(@"An error occurred while relaunching %1$@, but the new version will be available next time you run %1$@.", nil), [host name]], NSLocalizedDescriptionKey, [NSString stringWithFormat:@"Couldn't find the relauncher (expected to find it at %@)", relaunchPath], NSLocalizedFailureReasonErrorKey, nil]]];
-        // We intentionally don't abandon the update here so that the host won't initiate another.
-        return;
-    }		
-    
-    NSString *pathToRelaunch = [host bundlePath];
-    if ([[updater delegate] respondsToSelector:@selector(pathToRelaunchForUpdater:)])
-        pathToRelaunch = [[updater delegate] pathToRelaunchForUpdater:updater];
-    NSString *relaunchToolPath = [relaunchPath stringByAppendingPathComponent: @"/Contents/MacOS/finish_installation"];
-    [NSTask launchedTaskWithLaunchPath: relaunchToolPath arguments:[NSArray arrayWithObjects:[host bundlePath], pathToRelaunch, [NSString stringWithFormat:@"%d", [[NSProcessInfo processInfo] processIdentifier]], tempDir, relaunch ? @"1" : @"0", nil]];
+        if(!relaunchPath || ![[NSFileManager defaultManager] fileExistsAtPath:relaunchPath])
+        {
+            // Note that we explicitly use the host app's name here, since updating plugin for Mail relaunches Mail, not just the plugin.
+            [self abortUpdateWithError:[NSError errorWithDomain:SUSparkleErrorDomain code:SURelaunchError userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:SULocalizedString(@"An error occurred while relaunching %1$@, but the new version will be available next time you run %1$@.", nil), [host name]], NSLocalizedDescriptionKey, [NSString stringWithFormat:@"Couldn't find the relauncher (expected to find it at %@)", relaunchPath], NSLocalizedFailureReasonErrorKey, nil]]];
+            // We intentionally don't abandon the update here so that the host won't initiate another.
+            return;
+        }		
+        
+        NSString *pathToRelaunch = [host bundlePath];
+        if ([[updater delegate] respondsToSelector:@selector(pathToRelaunchForUpdater:)])
+            pathToRelaunch = [[updater delegate] pathToRelaunchForUpdater:updater];
+        NSString *relaunchToolPath = [relaunchPath stringByAppendingPathComponent: @"/Contents/MacOS/finish_installation"];
+        [NSTask launchedTaskWithLaunchPath: relaunchToolPath arguments:[NSArray arrayWithObjects:[host bundlePath], pathToRelaunch, [NSString stringWithFormat:@"%d", [[NSProcessInfo processInfo] processIdentifier]], tempDir, relaunch ? @"1" : @"0", nil]];
 
-    [NSApp terminate:self];
+        [NSApp terminate:self];
+    }
 }
 
 - (void)cleanUpDownload
