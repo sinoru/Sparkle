@@ -52,7 +52,9 @@ static void new_connection_handler(xpc_connection_t peer)
                 
                 [NSTask launchedTaskWithLaunchPath:path arguments:arguments];
                 
-                xpc_connection_send_message(xpc_dictionary_get_remote_connection(event), xpc_dictionary_create_reply(event));
+                xpc_object_t replyMessage = xpc_dictionary_create_reply(event);
+                
+                xpc_connection_send_message(xpc_dictionary_get_remote_connection(event), replyMessage);
             }
         }
     });

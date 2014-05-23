@@ -60,7 +60,7 @@
     xpc_dictionary_set_string(message, "perform", "copyPathWithAuthentication");
     
     xpc_dictionary_set_string(message, "src", src.UTF8String);
-    xpc_dictionary_set_string(message, "dst", src.UTF8String);
+    xpc_dictionary_set_string(message, "dst", dst.UTF8String);
     
     if (tmp)
         xpc_dictionary_set_string(message, "tmp", tmp.UTF8String);
@@ -75,7 +75,7 @@
         errorOccured = YES;
     }
     else {
-        assert(repliedMessage == XPC_TYPE_DICTIONARY);
+        assert(repliedMessageType == XPC_TYPE_DICTIONARY);
         
         size_t dataLength;
         const void *dataBytes = xpc_dictionary_get_data(repliedMessage, "error", &dataLength);
