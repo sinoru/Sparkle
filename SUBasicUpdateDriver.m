@@ -20,6 +20,7 @@
 #import "SUBinaryDeltaCommon.h"
 #import "SUCodeSigningVerifier.h"
 #import "SUUpdater_Private.h"
+#import "SUService.h"
 
 @interface SUBasicUpdateDriver () <NSURLDownloadDelegate>; @end
 
@@ -324,9 +325,19 @@
 #else
     [[NSFileManager defaultManager] createDirectoryAtPath: [targetPath stringByDeletingLastPathComponent] withIntermediateDirectories: YES attributes: [NSDictionary dictionary] error: &error];
 #endif
+    
+    SUService *sparkleService = nil;
+    if ( xpc_connection_create != NULL )
+        sparkleService = [[[SUService alloc] init] autorelease];
 
     // Only the paranoid survive: if there's already a stray copy of relaunch there, we would have problems.
-    if( [SUPlainInstaller copyPathWithAuthentication: relaunchPathToCopy overPath: targetPath temporaryName: nil error: &error] )
+    BOOL copied = NO;
+    if (sparkleService != NULL)
+        copied = [sparkleService copyPathWithAuthentication: relaunchPathToCopy overPath: targetPath temporaryName: nil error: &error];
+    else
+        copied = [SUPlainInstaller copyPathWithAuthentication: relaunchPathToCopy overPath: targetPath temporaryName: nil error: &error];
+        
+    if( copied )
         relaunchPath = [targetPath retain];
     else
         [self abortUpdateWithError:[NSError errorWithDomain:SUSparkleErrorDomain code:SURelaunchError userInfo:[NSDictionary dictionaryWithObjectsAndKeys:SULocalizedString(@"An error occurred while extracting the archive. Please try again later.", nil), NSLocalizedDescriptionKey, [NSString stringWithFormat:@"Couldn't copy relauncher (%@) to temporary path (%@)! %@", relaunchPathToCopy, targetPath, (error ? [error localizedDescription] : @"")], NSLocalizedFailureReasonErrorKey, nil]]];
@@ -347,67 +358,14 @@
     if ([[updater delegate] respondsToSelector:@selector(pathToRelaunchForUpdater:)])
         pathToRelaunch = [[updater delegate] pathToRelaunchForUpdater:updater];
     NSString *relaunchToolPath = [relaunchPath stringByAppendingPathComponent: @"/Contents/MacOS/finish_installation"];
+    NSArray *realunchToolArguments = [NSArray arrayWithObjects:[host bundlePath], pathToRelaunch, [NSString stringWithFormat:@"%d", [[NSProcessInfo processInfo] processIdentifier]], tempDir, relaunch ? @"1" : @"0", nil];
     
-    if (xpc_connection_create != NULL) {
-        xpc_connection_t relaunchService = xpc_connection_create("org.andymatuschak.finish-installation-helper", NULL);
-        
-        xpc_connection_set_event_handler(relaunchService, ^(xpc_object_t event) {
-            xpc_type_t type = xpc_get_type(event);
-            
-            if (type == XPC_TYPE_ERROR) {
-                
-                if (event == XPC_ERROR_CONNECTION_INTERRUPTED) {
-                    // The service has either cancaled itself, crashed, or been
-                    // terminated.  The XPC connection is still valid and sending a
-                    // message to it will re-launch the service.  If the service is
-                    // state-full, this is the time to initialize the new service.
-                    
-                    NSLog(@"Interrupted connection to XPC service");
-                } else if (event == XPC_ERROR_CONNECTION_INVALID) {
-                    // The service is invalid. Either the service name supplied to
-                    // xpc_connection_create() is incorrect or we (this process) have
-                    // canceled the service; we can do any cleanup of appliation
-                    // state at this point.
-                    
-                    NSLog(@"Connection Invalid error for XPC service");
-                } else {
-                    NSLog(@"Unexpected error for XPC service");
-                }
-            } else {
-                NSLog(@"Received unexpected event for XPC service");
-            }
-        });
-        
-        xpc_connection_resume(relaunchService);
-        
-        xpc_object_t message = xpc_dictionary_create(NULL, NULL, 0);
-        
-        xpc_object_t array = xpc_array_create(NULL, 0);
-        xpc_array_set_string(array, 0, relaunchToolPath.UTF8String);
-        xpc_array_set_string(array, 1, [host bundlePath].UTF8String);
-        xpc_array_set_string(array, 2, pathToRelaunch.UTF8String);
-        xpc_array_set_string(array, 3, [NSString stringWithFormat:@"%d", [[NSProcessInfo processInfo] processIdentifier]].UTF8String);
-        xpc_array_set_string(array, 4, tempDir.UTF8String);
-        xpc_array_set_bool(array, 5, relaunch);
-        
-        xpc_dictionary_set_value(message, "Root", array);
-        
-        xpc_object_t replyMessage = xpc_connection_send_message_with_reply_sync(relaunchService, message);
-        
-        xpc_type_t replyMessageType = xpc_get_type(replyMessage);
-        
-        if (replyMessageType == XPC_TYPE_DICTIONARY) {
-            [NSApp terminate:self];
-        }
-        else {
-            [self abortUpdateWithError:[NSError errorWithDomain:SUSparkleErrorDomain code:SURelaunchError userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:SULocalizedString(@"An error occurred while relaunching %1$@, but the new version will be available next time you run %1$@.", nil), [host name]], NSLocalizedDescriptionKey, [NSString stringWithFormat:@"Couldn't find the relauncher (expected to find it at %@)", relaunchPath], NSLocalizedFailureReasonErrorKey, nil]]];
-        }
-    }
-    else {
+    if (sparkleService != NULL)
+        [sparkleService launchTaskWithLaunchPath: relaunchToolPath arguments:realunchToolArguments];
+    else
         [NSTask launchedTaskWithLaunchPath: relaunchToolPath arguments:[NSArray arrayWithObjects:[host bundlePath], pathToRelaunch, [NSString stringWithFormat:@"%d", [[NSProcessInfo processInfo] processIdentifier]], tempDir, relaunch ? @"1" : @"0", nil]];
-        
-        [NSApp terminate:self];
-    }
+    
+    [NSApp terminate:self];
 }
 
 - (void)cleanUpDownload
